@@ -1,0 +1,19 @@
+{
+    "version": "VERSION 1.0",
+    "results": {
+        "v_uqiMw7tQ1Cc": [
+            {
+                "sentence": "One player moves all around the net holding the ball",
+                "timestamp": [1.23, 4.53]
+            },
+            {
+                "sentence": "A small group of men are seen running around a basketball court playing a game",
+                "timestamp": [5.24, 18.23]
+            }
+        ]
+    },
+    "external_data": {
+        "used": true, 
+        "details": "First fully-connected layer from VGG-16 pre-trained on ILSVRC-2012 training set"
+    }
+}
