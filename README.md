@@ -18,7 +18,7 @@ The configuration (from my experiments) is given in opt.py, including model setu
 
 Train dense-captioning model using the script train.py.
 
-First pre-train the proposal module for around 5 epochs. Set train_proposal=True and train_caption=False. Then train the whold dense-captioning model by setting train_proposal=True and train_caption=True.
+First pre-train the proposal module for around 5 epochs. Set train_proposal=True and train_caption=False. Then train the whole dense-captioning model by setting train_proposal=True and train_caption=True.
 
 ### Prediction
 
@@ -26,7 +26,7 @@ Follow the script test.py to make proposal predictions and to evaluate the predi
 
 ### Evaluation
 
-Please note that the official evaluation metric has been [updated](https://github.com/ranjaykrishna/densevid_eval/commit/bbbd49d31a038acf2642f7ae158bb6b9da6937fc) (Line 194). In the paper, old metric is reported (but still, you can compare results from different methods, all CVPR-2018 papers report old metric).
+Please note that the official evaluation metric has been [updated](https://github.com/ranjaykrishna/densevid_eval/commit/bbbd49d31a038acf2642f7ae158bb6b9da6937fc) (Line 194). In our paper, old metric is reported (but still, you can compare results from different methods, all CVPR-2018 papers report old metric).
 
 ### Results
 
