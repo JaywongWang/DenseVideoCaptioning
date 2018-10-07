@@ -150,7 +150,7 @@ class CaptionModel(object):
         inputs = {}
         outputs = {}
 
-        # 
+        # proposal feature sequences (the localized proposals/events can be of different length, I set a 'max_proposal_len' to make it easy for GPU processing)
         proposal_feats = tf.placeholder(tf.float32, [None, self.options['max_proposal_len'], self.options['video_feat_dim']])
         # combination of forward and backward hidden state, which encode event context information
         event_hidden_feats = tf.placeholder(tf.float32, [None, 2*self.options['rnn_size']])
@@ -158,7 +158,7 @@ class CaptionModel(object):
         inputs['event_hidden_feats'] = event_hidden_feats
         inputs['proposal_feats'] = proposal_feats
 
-        # batch size for inference
+        # batch size for inference, depends on how many proposals are generated for a video
         eval_batch_size = tf.shape(proposal_feats)[0]
         
         # intialize the rnn cell for captioning
@@ -182,7 +182,7 @@ class CaptionModel(object):
         # probability (confidence) for the predicted word
         word_confidences = tf.expand_dims(tf.fill([eval_batch_size], 1.), axis=-1)
 
-        # initial state
+        # initial state of caption generation
         initial_state = multi_rnn_cell_caption.zero_state(batch_size=eval_batch_size, dtype=tf.float32)
         state = initial_state
 
@@ -218,7 +218,7 @@ class CaptionModel(object):
                 feat_state_concat = tf.concat([proposal_feats_reshape, h_state_reshape, event_hidden_feats_reshape], axis=-1, name='feat_state_concat')
 
 
-                # use a two-layer network to model attention over video feature sequence when predicting next word (dynamic)
+                # use a two-layer network to model temporal soft attention over proposal feature sequence when predicting next word (dynamic)
                 with tf.variable_scope('attention', reuse=reuse) as attention_scope:
                     attention_layer1 = tf.contrib.layers.fully_connected(
                         inputs = feat_state_concat,
@@ -242,10 +242,11 @@ class CaptionModel(object):
                 attended_proposal_feat = tf.matmul(attention, proposal_feats, name='attended_proposal_feat')
                 attended_proposal_feat_reshape = tf.reshape(attended_proposal_feat, [-1, self.options['video_feat_dim']], name='attended_proposal_feat_reshape')
 
-
-                if self.options['use_c3d_only']:
+                # whether to use proposal contexts to help generate the corresponding caption
+                if self.options['no_context']:
                     proposal_feats_full = attended_proposal_feat_reshape
                 else:
+                    # whether to use gating function to combine the proposal contexts
                     if self.options['context_gating']:
                         # model a gate to weight each element of context and feature
                         attended_proposal_feat_reshape = tf.nn.tanh(attended_proposal_feat_reshape)
@@ -426,10 +427,6 @@ class CaptionModel(object):
                     activation_fn = None
                 )
 
-        # score
-        proposal_score_fw = tf.sigmoid(logit_output_fw, name='proposal_score_fw')
-        proposal_score_bw = tf.sigmoid(logit_output_bw, name='proposal_score_bw')
-
         # calculate multi-label loss: use weighted binary cross entropy objective
         proposal_fw_reshape = tf.reshape(proposal_fw, [-1, self.options['num_anchors']], name='proposal_fw_reshape')
         proposal_fw_float = tf.to_float(proposal_fw_reshape)
@@ -442,13 +439,12 @@ class CaptionModel(object):
         weight1 = tf.reshape(proposal_weight[:, 1], [-1, self.options['num_anchors']])
 
         # tile weight batch_size times
-        weight0 = tf.tile(weight0, [tf.shape(proposal_score_fw)[0], 1])
-        weight1 = tf.tile(weight1, [tf.shape(proposal_score_fw)[0], 1])
+        weight0 = tf.tile(weight0, [tf.shape(logit_output_fw)[0], 1])
+        weight1 = tf.tile(weight1, [tf.shape(logit_output_fw)[0], 1])
 
         # get weighted sigmoid xentropy loss
-        # formula: sum(w0*y*-log(score) + w1*(1-y)*-log(1-score))
-        loss_term_fw = tf.add(tf.multiply(tf.multiply(0.-tf.log(tf.clip_by_value(proposal_score_fw, self.options['log_input_min'], 1.)), proposal_fw_float), weight0), tf.multiply(tf.multiply(0.-tf.log(tf.clip_by_value(1.-proposal_score_fw, self.options['log_input_min'], 1.)), 1.-proposal_fw_float), weight1), name='loss_term_fw')
-        loss_term_bw = tf.add(tf.multiply(tf.multiply(0.-tf.log(tf.clip_by_value(proposal_score_bw, self.options['log_input_min'], 1.)), proposal_bw_float), weight0), tf.multiply(tf.multiply(0.-tf.log(tf.clip_by_value(1.-proposal_score_bw, self.options['log_input_min'], 1.)), 1.-proposal_bw_float), weight1), name='loss_term_bw')
+        loss_term_fw = tf.nn.weighted_cross_entropy_with_logits(targets=proposal_fw_float, logits=logit_output_fw, pos_weight=weight0)
+        loss_term_bw = tf.nn.weighted_cross_entropy_with_logits(targets=proposal_bw_float, logits=logit_output_bw, pos_weight=weight0)
 
         loss_term_fw_sum = tf.reduce_sum(loss_term_fw, axis=-1, name='loss_term_fw_sum')
         loss_term_bw_sum = tf.reduce_sum(loss_term_bw, axis=-1, name='loss_term_bw_sum')
@@ -467,6 +463,7 @@ class CaptionModel(object):
         outputs['proposal_fw_loss'] = proposal_fw_loss
         outputs['proposal_bw_loss'] = proposal_bw_loss
         outputs['proposal_loss'] = proposal_loss
+
 
         #*************** Define Captioning Module *****************#
 
@@ -506,6 +503,7 @@ class CaptionModel(object):
         caption_proposed = tf.boolean_mask(caption[0], boolean_mask, name='caption_proposed')
         caption_mask_proposed = tf.boolean_mask(caption_mask[0], boolean_mask, name='caption_mask_proposed')
 
+        # the number of proposal-caption pairs for training
         n_proposals = tf.shape(caption_proposed)[0]
 
         rnn_cell_caption = tf.contrib.rnn.LSTMCell(
@@ -585,7 +583,7 @@ class CaptionModel(object):
                 attended_proposal_feat_reshape = tf.reshape(attended_proposal_feat, [-1, self.options['video_feat_dim']], name='attended_proposal_feat_reshape')
 
                 
-                if self.options['use_c3d_only']:
+                if self.options['no_context']:
                     proposal_feats_full = attended_proposal_feat_reshape
                 else:
                     if self.options['context_gating']:
