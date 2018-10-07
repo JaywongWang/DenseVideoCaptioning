@@ -151,7 +151,6 @@ def evaluation_metric_greedy(options, data_provision, sess, proposal_inputs, cap
         proposal_infos.append({'timestamp':[0., duration], 'score': 1., 'event_hidden_feats': hidden_feat, 'proposal_feats': proposal_feats})
         
 
-
         proposal_infos = sorted(proposal_infos, key=getKey, reverse=True)
         proposal_infos = proposal_infos[:options['max_proposal_num']]
 
@@ -399,7 +398,7 @@ def train(options):
     eval_id = 0
     train_batch_generator = data_provision.iterate_batch('train', batch_size)
     checkpoint_filenames = []
-    current_module = 'proposal_module'
+    
     for epoch in range(init_epoch, max_epochs):
         
         # manually set when to decay learning rate

@@ -195,7 +195,7 @@ def test(options):
 
         result = [{'timestamp': proposal['timestamp'], 'proposal_score': float(proposal['score']), 'sentence': out_sentences[i], 'sentence_confidence': float(sentence_confidences[i])} for i, proposal in enumerate(proposal_infos)]
 
-        # jointly rank by proposal score and sentence confidence
+        # jointly ranking by proposal score and sentence confidence
         result = sorted(result, key=getJointKey, reverse=True)
                     
         results[vid] = result
