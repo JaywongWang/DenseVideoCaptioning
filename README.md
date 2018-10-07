@@ -40,4 +40,4 @@ python==2.7.5
 
 Other versions may also work.
 
-**Update:** I correct some naming error and simply the proposal loss using tensorflow built-in function.
+**Update:** I correct some naming errors and simplify the proposal loss using tensorflow built-in function.
