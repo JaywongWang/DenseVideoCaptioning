@@ -260,5 +260,5 @@ def test(options):
 
 if __name__ == '__main__':
 
-    cur_options = default_options()
+    options = default_options()
     test(options)
