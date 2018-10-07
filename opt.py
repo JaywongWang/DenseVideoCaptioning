@@ -17,11 +17,11 @@ def default_options():
 
     ### DATA
     options['feature_data_path'] = 'dataset/ActivityNet/features/sub_activitynet_v1-3_stride_64frame.c3d.hdf5' # download feature from ActivityNet website, and use a stride of 64 frames (shorten the unfolding steps for encoding LSTMs)
-    options['localization_data_path'] = 'dataset/ActivityNet_Captions'
+    options['localization_data_path'] = 'dataset/ActivityNet_Captions' 
     options['caption_data_root'] = 'dataset/ActivityNet_Captions/preprocess'
     options['vocab_file'] = os.path.join(options['caption_data_root'], 'word2id.json')
-    options['vocab'] = json.load(open(options['vocab_file']))
-    options['vocab_size'] = len(options['vocab'])
+    options['vocab'] = json.load(open(options['vocab_file']))  # dictionary: word to word_id
+    options['vocab_size'] = len(options['vocab'])   # number of words
 
     options['init_from'] = ''       # checkpoint to initialize with
     options['init_module'] = 'all'  # all/proposal/caption, which module to initialize
@@ -43,9 +43,7 @@ def default_options():
 
     
     ### OPTIMIZATION
-    # GPU id
-    options['gpu_id'] = [0]
-    # train id
+    options['gpu_id'] = [0]    # GPU ids
     options['train_id'] = 1    # train id (useful when you have multiple runs)
     options['solver'] = 'adam' # 'adam','rmsprop','sgd_nestreov_momentum'
     options['momentum'] =  0.9     # only valid when solver is set to momentum optimizer
@@ -58,7 +56,7 @@ def default_options():
     options['n_epoch_to_decay'] = list(range(20,60,20))[::-1]
     options['auto_lr_decay'] = True  # whether automatically decay learning rate based on val loss or evaluation score (only when evaluation_metric is True)
     options['n_eval_observe'] = 5   # if after 5 evaluations, the val loss is still not lower, go back to change learning rate 
-    options['min_lr'] = 1e-5
+    options['min_lr'] = 1e-5      # minimum learning rate allowed
     options['reg'] = 1e-6        # regularization strength
     options['init_scale'] = 0.08 # the init scale for uniform, here for initializing word embedding matrix
     options['max_epochs'] = 100  # maximum epochs
@@ -84,18 +82,18 @@ def default_options():
     options['max_proposal_num'] = 100   # just for fast evaluation during training phase
 
     ### LOGGING
-    options['ckpt_prefix'] = 'checkpoints/' + str(options['train_id']) + '/'
+    options['ckpt_prefix'] = 'checkpoints/' + str(options['train_id']) + '/'  # where to save your checkpoints
     options['ckpt_sufix'] = ''
-    options['status_file'] = options['ckpt_prefix'] + 'status.json'
-    options['n_iters_display'] = 1
+    options['status_file'] = options['ckpt_prefix'] + 'status.json'   # where to save your training status
+    options['n_iters_display'] = 1   # frequency to display
     if not os.path.exists(options['ckpt_prefix']):
         os.mkdir(options['ckpt_prefix'])
 
 
     ### DEBUG
-    options['print_debug'] = True
+    options['print_debug'] = True   # 
     options['test_tensors'] = ['video_feat_fw', 'video_feat_bw', 'proposal_fw', 'proposal_bw', 'proposal_weight', 'proposal_score_fw', 'caption',
-    'caption_mask', 'boolean_mask']
+    'caption_mask', 'boolean_mask']  
 
     return options
     
