@@ -4,7 +4,7 @@ Tensorflow Implementation of the Paper [Bidirectional Attentive Fusion with Cont
 
 ### Data Preparation
 
-Please download annotation data and C3D features from the website [ActivityNet Captions](https://cs.stanford.edu/people/ranjaykrishna/densevid/).
+Please download annotation data and C3D features from the website [ActivityNet Captions](https://cs.stanford.edu/people/ranjaykrishna/densevid/). The ActivityNet C3D features with stride of 64 frames (used in my paper) can be found [here](https://drive.google.com/file/d/1D6-sDPEkOJX32h0-EclxpiEmiMkNGybo/view?usp=sharing).
 
 Please follow the script dataset/ActivityNet_Captions/preprocess/anchors/get_anchors.py to obtain clustered anchors and their pos/neg weights (for handling imbalance class problem). I already put the generated files in dataset/ActivityNet_Captions/preprocess/anchors/.
 
@@ -40,4 +40,6 @@ python==2.7.5
 
 Other versions may also work.
 
-**Update:** I correct some naming errors and simplify the proposal loss using tensorflow built-in function.
+**Update:** 
+1. I corrected some naming errors and simplified the proposal loss using tensorflow built-in function.
+2. I uploaded C3D features with stride of 64 frames (used in my paper). You can find it [here](https://drive.google.com/file/d/1D6-sDPEkOJX32h0-EclxpiEmiMkNGybo/view?usp=sharing).
