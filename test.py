@@ -94,12 +94,12 @@ def test(options):
 
     split = 'val'
 
-    test_ids = json.load(open('/data1/jwongwang/dataset/ActivityNet_Captions/%s_ids.json'%split, 'r'))
-    features = h5py.File('/data1/jwongwang/dataset/ActivityNet/features/c3d/sub_nonoverlap_shorter_4_activitynet_v1-3.c3d.hdf5', 'r')
+    test_ids = json.load(open('dataset/ActivityNet_Captions/%s_ids.json'%split, 'r'))
+    features = h5py.File('dataset/ActivityNet/features/c3d/sub_activitynet_v1-3_stride_64frame.c3d.hdf5', 'r')
     stride = 4
     c3d_resolution = 16
-    frame_rates = json.load(open('/data1/jwongwang/dataset/ActivityNet/video_info.json'))
-    anchor_data = open('/data1/jwongwang/dataset/ActivityNet_Captions/preprocess_hierarchical/anchors/anchors.txt', 'r').readlines()
+    frame_rates = json.load(open('dataset/ActivityNet_Captions/video_fps.json'))
+    anchor_data = open('dataset/ActivityNet_Captions/preprocess/anchors/anchors.txt', 'r').readlines()
     anchors = [float(line.strip()) for line in anchor_data]
 
     print('Will evaluate %d videos from %s set ...'%(len(test_ids), split))
