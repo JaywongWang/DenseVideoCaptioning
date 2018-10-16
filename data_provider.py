@@ -211,9 +211,9 @@ class DataProvision:
                             i_bw = feature_len - 1 - (start_feat_id+end_feat_id-i)
                             i_bw = max(min(i_bw, feature_len-1), 0)
 
-                            if end_pred >= end and i - end_feat_id <= 5:
-                                gt_proposal_fw[i, anchor_id] = 1
-                                gt_proposal_bw[i_bw, anchor_id] = 1
+                            
+                            gt_proposal_fw[i, anchor_id] = 1
+                            gt_proposal_bw[i_bw, anchor_id] = 1
                                 
                         
                             if iou > self._options['caption_tiou_threshold']:
