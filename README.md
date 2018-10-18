@@ -43,5 +43,5 @@ Other versions may also work.
 **Update:** 
 1. I corrected some naming errors and simplified the proposal loss using tensorflow built-in function.
 2. I uploaded C3D features with stride of 64 frames (used in my paper). You can find it [here](https://drive.google.com/file/d/1D6-sDPEkOJX32h0-EclxpiEmiMkNGybo/view?usp=sharing).
-3. I uploaded val/test results of both without joint ranking and without joint ranking.
+3. I uploaded val/test results of both without joint ranking and with joint ranking.
 4. I uploaded video_fps.json and updated test.py.
