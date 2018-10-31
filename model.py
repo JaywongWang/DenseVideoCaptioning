@@ -517,7 +517,10 @@ class CaptionModel(object):
             input_keep_prob=1.0 - rnn_drop,
             output_keep_prob=1.0 - rnn_drop 
         )
-        
+
+        def get_rnn_cell():
+            return tf.contrib.rnn.LSTMCell(num_units=self.options['rnn_size'], state_is_tuple=True, initializer=tf.orthogonal_initializer())
+
         # multi-layer LSTM
         multi_rnn_cell_caption = tf.contrib.rnn.MultiRNNCell([get_rnn_cell() for _ in range(self.options['num_rnn_layers'])], state_is_tuple=True)
 
