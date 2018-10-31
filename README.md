@@ -48,3 +48,4 @@ Other versions may also work.
 3. I uploaded val/test results of both without joint ranking and with joint ranking.
 4. I uploaded video_fps.json and updated test.py.
 5. Due to large file constraint, you may need to download data/paraphrase-en.gz [here](https://github.com/tylin/coco-caption/tree/3f0fe9b819c0ea881a56441e4de1146924a394eb/pycocoevalcap/meteor/data) and put it in densevid_eval-master/coco-caption/pycocoevalcap/meteor/data/.
+6. I correct multi-rnn mistake caused by get_rnn_cell() function (see model.py).
