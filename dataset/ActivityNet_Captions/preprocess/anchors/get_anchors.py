@@ -138,10 +138,6 @@ class get_proposal_label_thread (threading.Thread):
                         end_pred = (float(i+1)/feature_len) * duration
                         start_pred = end_pred - anchor
 
-                        # 
-                        if end_pred < end or i - int(end*feature_len/duration) > 5:
-                            continue
-
                         intersection = max(0, min(end, end_pred) - max(start, start_pred))
                         union = min(max(end, end_pred) - min(start, start_pred), end-start + end_pred-start_pred)
                         iou = float(intersection) / (union + 1e-8)
