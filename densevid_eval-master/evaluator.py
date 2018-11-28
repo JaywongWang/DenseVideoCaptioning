@@ -10,6 +10,9 @@ import json
 import sys
 sys.path.insert(0, './coco-caption') # Hack to allow the import of pycocoeval
 
+reload(sys)
+sys.setdefaultencoding('utf-8')
+
 from pycocoevalcap.tokenizer.ptbtokenizer import PTBTokenizer
 from pycocoevalcap.bleu.bleu import Bleu
 from pycocoevalcap.meteor.meteor import Meteor
