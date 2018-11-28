@@ -14,7 +14,7 @@ Please follow the script dataset/ActivityNet_Captions/preprocess/build_vocab.py 
 
 ### Hyper Parameters
 
-The configuration (from my experiments) is given in opt.py, including model setup, training options, and testing options.
+The configuration (from my experiments) is given in opt.py, including model setup, training options, and testing options. You may want to set max_proposal_num=1000 if saving valiation time is not the first priority.
 
 ### Training
 
@@ -24,7 +24,7 @@ First pre-train the proposal module for around 5 epochs. Set train_proposal=True
 
 ### Prediction
 
-Follow the script test.py to make proposal predictions and to evaluate the predictions.
+Follow the script test.py to make proposal predictions and to evaluate the predictions. Use max_proposal_num=1000 to generate .json test file and then use script "python2 evaluate.py -s [json_file] -ppv 100" to evaluate the performance (the joint ranking requres to drop items that are less confident).
 
 ### Evaluation
 
@@ -48,4 +48,5 @@ Other versions may also work.
 3. I uploaded val/test results of both without joint ranking and with joint ranking.
 4. I uploaded video_fps.json and updated test.py.
 5. Due to large file constraint, you may need to download data/paraphrase-en.gz [here](https://github.com/tylin/coco-caption/tree/3f0fe9b819c0ea881a56441e4de1146924a394eb/pycocoevalcap/meteor/data) and put it in densevid_eval-master/coco-caption/pycocoevalcap/meteor/data/.
-6. I correct multi-rnn mistake caused by get_rnn_cell() function (see model.py).
+6. I corrected multi-rnn mistake casused by get_rnn_cell() function (see model.py).
+7. I updated evaluation code. "evaluator_old.py" is used in my paper, "evaluator.py" is used since ActivityNet Captions 2018 Challenge. 
