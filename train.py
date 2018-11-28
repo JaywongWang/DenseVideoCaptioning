@@ -15,7 +15,7 @@ sys.setdefaultencoding('utf-8')
 sys.path.insert(0, './densevid_eval-master')
 sys.path.insert(0, './densevid_eval-master/coco-caption')
 #from evaluator import *
-from evaluator_efficient import *
+from evaluator_old import *
 
 def getKey(item):
     return item['score']
