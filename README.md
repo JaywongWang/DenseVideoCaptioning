@@ -4,6 +4,15 @@ Tensorflow Implementation of the Paper [Bidirectional Attentive Fusion with Cont
 
 ![alt text](method.png)
 
+### Citation
+
+@inproceedings{wang2018bidirectional,
+  title={Bidirectional Attentive Fusion with Context Gating for Dense Video Captioning},
+  author={Wang, Jingwen and Jiang, Wenhao and Ma, Lin and Liu, Wei and Xu, Yong},
+  booktitle={Proceedings of the IEEE Conference on Computer Vision and Pattern Recognition},
+  year={2018}
+}
+
 ### Data Preparation
 
 Please download annotation data and C3D features from the website [ActivityNet Captions](https://cs.stanford.edu/people/ranjaykrishna/densevid/). The ActivityNet C3D features with stride of 64 frames (used in my paper) can be found [here](https://drive.google.com/file/d/1D6-sDPEkOJX32h0-EclxpiEmiMkNGybo/view?usp=sharing).
