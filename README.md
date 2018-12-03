@@ -9,7 +9,7 @@ Tensorflow Implementation of the Paper [Bidirectional Attentive Fusion with Cont
     @inproceedings{wang2018bidirectional,
       title={Bidirectional Attentive Fusion with Context Gating for Dense Video Captioning},
       author={Wang, Jingwen and Jiang, Wenhao and Ma, Lin and Liu, Wei and Xu, Yong},
-      booktitle={Proceedings of the IEEE Conference on Computer Vision and Pattern Recognition},
+      booktitle={CVPR},
       year={2018}
     }
 
