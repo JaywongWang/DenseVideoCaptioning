@@ -37,7 +37,7 @@ Follow the script test.py to make proposal predictions and to evaluate the predi
 
 ### Evaluation
 
-Please note that the official evaluation metric has been [updated](https://github.com/ranjaykrishna/densevid_eval). In the paper, old metric is reported (but still, you can compare results from different methods, all CVPR-2018 papers report old metric).
+Please note that the official evaluation metric has been [updated](https://github.com/ranjaykrishna/densevid_eval/commit/bbbd49d31a038acf2642f7ae158bb6b9da6937fc) (Line 194). In the paper, old metric is reported (but still, you can compare results from different methods, all CVPR-2018 papers report old metric).
 
 ### Results
 
@@ -59,3 +59,5 @@ Other versions may also work.
 5. Due to large file constraint, you may need to download data/paraphrase-en.gz [here](https://github.com/tylin/coco-caption/tree/3f0fe9b819c0ea881a56441e4de1146924a394eb/pycocoevalcap/meteor/data) and put it in densevid_eval-master/coco-caption/pycocoevalcap/meteor/data/.
 6. I corrected multi-rnn mistake casused by get_rnn_cell() function (see model.py).
 7. I updated evaluation code. "evaluator_old.py" is used in my paper, "evaluator.py" is used since ActivityNet Captions 2018 Challenge. 
+8. I removed too small anchors and too large anchors, resulting into 120 anchors.
+9. I modified data_provider.py and model.py to correct the loss weighting.
