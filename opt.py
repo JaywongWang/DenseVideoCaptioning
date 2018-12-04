@@ -67,8 +67,8 @@ def default_options():
 
     options['clip_gradient_norm'] = 100.  # threshold to clip gradients: avoid gradient exploding problem; set to -1 to avoid gradient clipping
     options['log_input_min']  = 1e-20     # minimum input to the log() function
-    options['weight_proposal'] = 0.1  # contribution weight of proposal module
-    options['weight_caption'] = 1.0   # contribution weight of captioning module
+    options['weight_proposal'] = 1.0  # contribution weight of proposal module
+    options['weight_caption'] = 5.0   # contribution weight of captioning module
     options['proposal_tiou_threshold'] = 0.5   # tiou threshold to positive samples, when changed, calculate class weights for positive/negative class again
     options['caption_tiou_threshold'] = 0.8    # tiou threshold to select high-iou proposals to feed in the captioning module
     options['predict_score_threshold'] = 0.5 # score threshold to select proposals at test time
@@ -92,8 +92,7 @@ def default_options():
 
     ### DEBUG
     options['print_debug'] = True   # 
-    options['test_tensors'] = ['video_feat_fw', 'video_feat_bw', 'proposal_fw', 'proposal_bw', 'proposal_weight', 'proposal_score_fw', 'caption',
-    'caption_mask', 'boolean_mask']  
+    options['test_tensors'] = ['video_feat_fw', 'video_feat_bw', 'proposal_fw', 'proposal_bw', 'proposal_weight']  
 
     return options
     
