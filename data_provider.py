@@ -20,6 +20,9 @@ class DataProvision:
         self._options = options
         self._splits = {'train':'train', 'val':'val_1'}
 
+        np.random.seed(options['random_seed'])
+        random.seed(options['random_seed'])
+
         self._ids = {}  # video ids
         captions = {}
         self._sizes = {}
@@ -52,6 +55,11 @@ class DataProvision:
         self._proposal_weight = json.load(open(os.path.join(self._options['caption_data_root'], 'anchors', 'weights.json')))
         if self._options['proposal_tiou_threshold'] != 0.5:
             raise ValueError('Might need to recalculate class weights to handle imbalance data')
+
+        # when using tesorflow built-in function tf.nn.weighted_cross_entropy_with_logits()
+        for i in range(len(self._proposal_weight)):
+            self._proposal_weight[i][0] /= self._proposal_weight[i][1]
+            self._proposal_weight[i][1] = 1.
 
         # get anchors
         print('Loading anchor data ...')
@@ -194,6 +202,7 @@ class DataProvision:
                 mid_feature_id = int(round(((1.-self._options['proposal_tiou_threshold'])*end + self._options['proposal_tiou_threshold']*start) * feature_len / duration)) - 1
                 mid_feature_id = max(0, mid_feature_id)
 
+                
                 for i in range(mid_feature_id, feature_len):
                     overlap = False
                     for anchor_id, anchor in enumerate(self._anchors):

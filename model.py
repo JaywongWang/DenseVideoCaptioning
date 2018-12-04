@@ -14,6 +14,8 @@ class CaptionModel(object):
             minval = - self.options['init_scale'],
             maxval = self.options['init_scale'])
 
+        tf.set_random_seed(options['random_seed'])
+
     """ 
     build video feature embedding
     """
@@ -450,8 +452,8 @@ class CaptionModel(object):
         loss_term_bw_sum = tf.reduce_sum(loss_term_bw, axis=-1, name='loss_term_bw_sum')
 
         
-        proposal_fw_loss = tf.reduce_sum(loss_term_fw_sum) / (1.*tf.to_float(tf.shape(video_feat_fw)[1]))
-        proposal_bw_loss = tf.reduce_sum(loss_term_bw_sum) / (1.*tf.to_float(tf.shape(video_feat_bw)[1]))
+        proposal_fw_loss = tf.reduce_sum(loss_term_fw_sum) / (float(self.options['num_anchors'])*tf.to_float(tf.shape(video_feat_fw)[1]))
+        proposal_bw_loss = tf.reduce_sum(loss_term_bw_sum) / (float(self.options['num_anchors'])*tf.to_float(tf.shape(video_feat_bw)[1]))
         proposal_loss = (proposal_fw_loss + proposal_bw_loss) / 2.
 
         # summary data, for visualization using Tensorboard
@@ -639,7 +641,7 @@ class CaptionModel(object):
                 caption_loss = caption_loss + loss
 
         # mean loss for each word
-        caption_loss = caption_loss / tf.to_float(tf.reduce_sum(caption_mask_proposed)+1) 
+        caption_loss = caption_loss / (tf.to_float(batch_size)*tf.to_float(tf.reduce_sum(caption_mask_proposed)) + 1)
 
         tf.summary.scalar('caption_loss', caption_loss)
         reg_loss = tf.add_n([tf.nn.l2_loss(v) for v in tf.trainable_variables() if not v.name.startswith('caption_module/word_embed')])
