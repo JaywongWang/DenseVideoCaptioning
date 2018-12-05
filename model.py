@@ -256,7 +256,7 @@ class CaptionModel(object):
                             context_feats_transform = tf.contrib.layers.fully_connected(
                                 inputs=event_hidden_feats,
                                 num_outputs=self.options['video_feat_dim'],
-                                activation_fn=None,
+                                activation_fn=tf.nn.tanh,
                                 weights_initializer=tf.contrib.layers.xavier_initializer()
                             )
                             
@@ -598,7 +598,7 @@ class CaptionModel(object):
                             context_feats_transform = tf.contrib.layers.fully_connected(
                                 inputs=event_hidden_feats,
                                 num_outputs=self.options['video_feat_dim'],
-                                activation_fn=None,
+                                activation_fn=tf.nn.tanh,
                                 weights_initializer=tf.contrib.layers.xavier_initializer()
                             )
                             
