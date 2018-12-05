@@ -33,7 +33,7 @@ First pre-train the proposal module for around 5 epochs. Set train_proposal=True
 
 ### Prediction
 
-Follow the script test.py to make proposal predictions and to evaluate the predictions. Use max_proposal_num=1000 to generate .json test file and then use script "python2 evaluate.py -s [json_file] -ppv 100" to evaluate the performance (the joint ranking requres to drop items that are less confident).
+Follow the script test.py to make proposal predictions and to evaluate the predictions. Use max_proposal_num=1000 to generate .json test file and then use script "python2 evaluate_old.py -s [json_file] -ppv 100" to evaluate the performance (the joint ranking requres to drop items that are less confident).
 
 ### Evaluation
 
