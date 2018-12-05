@@ -236,7 +236,7 @@ class ANETcaptions(object):
                             vid2capid[vid_id].append(unique_index)
 
                 # 
-                unique_index += 1
+                # unique_index += 1
 
 
         
