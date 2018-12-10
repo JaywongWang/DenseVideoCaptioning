@@ -35,10 +35,10 @@ def default_options():
     options['num_rnn_layers'] = 2         # number of RNN layers
     options['rnn_size'] = 512        # hidden neuron size
     options['rnn_drop'] = 0.3        # rnn dropout
-    options['num_anchors'] = 128     # number of anchors  
+    options['num_anchors'] = 120     # number of anchors  
     options['no_context'] = False   # whether to use proposal context 
     options['context_gating'] = True  # whether to apply context gating
-    options['max_proposal_len'] = 150    # max length of proposal allowed, used to construct a fixed length tensor for all proposals from one video
+    options['max_proposal_len'] = 110    # max length of proposal allowed, used to construct a fixed length tensor for all proposals from one video
     options['attention_hidden_size'] = 512  # size of hidden neuron for the attention hidden layer
 
     
