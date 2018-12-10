@@ -49,13 +49,13 @@ def default_options():
     options['momentum'] =  0.9     # only valid when solver is set to momentum optimizer
     options['batch_size'] = 1   # set to 1 to avoid different proposals problem, note that current implementation only supports batch_size=1
     options['eval_batch_size'] = 1
-    options['loss_eval_num'] = 5000       # maximum evaluation batch number for loss
-    options['metric_eval_num'] = 5000     # evaluation batch number for metric
+    options['loss_eval_num'] = 1000       # maximum evaluation batch number for loss
+    options['metric_eval_num'] = 1000     # evaluation batch number for metric
     options['learning_rate'] = 1e-3       # initial learning rate
     options['lr_decay_factor'] = 0.1      # learning rate decay factor
     options['n_epoch_to_decay'] = list(range(20,60,20))[::-1]
     options['auto_lr_decay'] = True  # whether automatically decay learning rate based on val loss or evaluation score (only when evaluation_metric is True)
-    options['n_eval_observe'] = 5   # if after 5 evaluations, the val loss is still not lower, go back to change learning rate 
+    options['n_eval_observe'] = 10   # if after 5 evaluations, the val loss is still not lower, go back to change learning rate 
     options['min_lr'] = 1e-5      # minimum learning rate allowed
     options['reg'] = 1e-6        # regularization strength
     options['init_scale'] = 0.08 # the init scale for uniform, here for initializing word embedding matrix
