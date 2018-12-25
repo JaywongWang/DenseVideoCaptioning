@@ -64,4 +64,4 @@ Other versions may also work.
 8. I removed too small anchors and too large anchors, resulting into 120 anchors.
 9. I modified data_provider.py and model.py to correct the loss weighting.
 10. I corrected the mistake from the evaluator (evaluator_old.py & evaluate_old.py). You can match the code with https://github.com/ranjaykrishna/densevid_eval/blob/b8d90707984bf9c99454ba82b089006f14fb62b3/evaluate.py
-11. I uploaded the pretrained [model](https://drive.google.com/drive/folders/1qeH5r5XEabkcQDJ25unSCvEUziRleN80?usp=sharing). Please also download the updated code.
+11. I uploaded the pretrained [model](https://drive.google.com/drive/folders/1qeH5r5XEabkcQDJ25unSCvEUziRleN80?usp=sharing) (re-implementation). Please also download the updated code.
