@@ -33,7 +33,7 @@ First pre-train the proposal module for around 5 epochs. Set train_proposal=True
 
 ### Prediction
 
-Follow the script test.py to make proposal predictions and to evaluate the predictions. Use max_proposal_num=1000 to generate .json test file and then use script "python2 evaluate_old.py -s [json_file] -ppv 100" to evaluate the performance (the joint ranking requres to drop items that are less confident).
+Follow the script test.py to make proposal predictions and to evaluate the predictions. Use max_proposal_num=1000 to generate .json test file and then use script "python2 evaluate.py -s [json_file] -ppv 100" to evaluate the performance (the joint ranking requres to drop items that are less confident).
 
 ### Evaluation
 
@@ -41,7 +41,8 @@ Please note that the official evaluation metric has been [updated](https://githu
 
 ### Results
 
-The predicted results for val/test set can be found [here](https://drive.google.com/drive/folders/1KZfzoTV3qqtnzALwZgd5IU5BRkj69SZ8?usp=sharing).
+[Deprecated] The predicted results for val/test set can be found [here](https://drive.google.com/drive/folders/1KZfzoTV3qqtnzALwZgd5IU5BRkj69SZ8?usp=sharing).
+The pre-trained model and validation prediction can be found [here](https://drive.google.com/drive/folders/1qeH5r5XEabkcQDJ25unSCvEUziRleN80?usp=sharing).
 
 ### Dependencies
 
@@ -62,3 +63,4 @@ Other versions may also work.
 8. I removed too small anchors and too large anchors, resulting into 120 anchors.
 9. I modified data_provider.py and model.py to correct the loss weighting.
 10. I corrected the mistake from the evaluator (evaluator_old.py & evaluate_old.py). You can match the code with https://github.com/ranjaykrishna/densevid_eval/blob/b8d90707984bf9c99454ba82b089006f14fb62b3/evaluate.py
+11. I uploaded pretrained [model](https://drive.google.com/drive/folders/1qeH5r5XEabkcQDJ25unSCvEUziRleN80?usp=sharing). Please also download the updated code.
