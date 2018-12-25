@@ -30,7 +30,8 @@ def getKey(item):
 For joint ranking: combine proposal scores and caption confidence
 """
 def getJointKey(item):
-    return 10.*item['proposal_score'] + item['sentence_confidence']
+    #return 10.*item['proposal_score'] + item['sentence_confidence']
+    return item['proposal_score'] + 5.*item['sentence_confidence']
 
 """
 Generate batch data and corresponding mask data for the input
@@ -95,7 +96,8 @@ def test(options):
     split = 'val'
 
     test_ids = json.load(open('dataset/ActivityNet_Captions/%s_ids.json'%split, 'r'))
-    features = h5py.File('dataset/ActivityNet/features/c3d/sub_activitynet_v1-3_stride_64frame.c3d.hdf5', 'r')
+    #features = h5py.File('dataset/ActivityNet/features/c3d/sub_activitynet_v1-3_stride_64frame.c3d.hdf5', 'r')
+    features = h5py.File('/data1/jwongwang/dataset/ActivityNet/features/c3d/activitynet_c3d_fc7_stride_64_frame.hdf5', 'r')
     stride = 4
     c3d_resolution = 16
     frame_rates = json.load(open('dataset/ActivityNet_Captions/video_fps.json'))
@@ -108,7 +110,7 @@ def test(options):
         print('\nProcessed %d-th video: %s'%(count, vid))
 
         # video feature sequence 
-        video_feat_fw = features[vid]['c3d_shorter_features'].value
+        video_feat_fw = features[vid]['c3d_fc7_features'].value
         video_feat_bw = np.flip(video_feat_fw, axis=0)
         video_feat_fw = np.expand_dims(video_feat_fw, axis=0)
         video_feat_bw = np.expand_dims(video_feat_bw, axis=0)
@@ -175,17 +177,28 @@ def test(options):
         proposal_feats, _ = process_batch_data(proposal_feats, options['max_proposal_len'])
 
         # word ids
-        word_ids, sentence_confidences = sess.run([caption_outputs['word_ids'], caption_outputs['sentence_confidences']], feed_dict={caption_inputs['event_hidden_feats']: event_hidden_feats, caption_inputs['proposal_feats']: proposal_feats})
+        word_ids, word_confidences = sess.run([caption_outputs['word_ids'], caption_outputs['word_confidences']], feed_dict={caption_inputs['event_hidden_feats']: event_hidden_feats, caption_inputs['proposal_feats']: proposal_feats})
         
         sentences = [[ix2word[i] for i in ids] for ids in word_ids]
         sentences = [sentence[1:] for sentence in sentences]
         
         # remove <END> word
         out_sentences = []
-        for sentence in sentences:
+        sentence_confidences = []
+        for i, sentence in enumerate(sentences):
+            end_id = options['caption_seq_len']
             if '<END>' in sentence:
-                sentence = sentence[:sentence.index('<END>')]
-            out_sentences.append(' '.join(sentence))
+                end_id = sentence.index('<END>')
+                sentence = sentence[:end_id]
+            sentence = ' '.join(sentence)
+            sentence = sentence.replace('<UNK>', '') # remove unknown word token 
+            out_sentences.append(sentence)
+            
+            if end_id <= 3:
+                sentence_confidence = -1000.   # a very low score for very short sentence 
+            else:
+                sentence_confidence = float(np.mean(word_confidences[i, 1:end_id]))  # use np.mean instead of np.sum to avoid favoring short sentences
+            sentence_confidences.append(sentence_confidence)
 
         
         print('Output sentences: ')
@@ -225,6 +238,7 @@ def test(options):
     evaluator = ANETcaptions(ground_truth_filenames=['densevid_eval-master/data/val_1.json', 'densevid_eval-master/data/val_2.json'],
                              prediction_filename=resFile,
                              tious=options['tiou_measure'],
+                             #max_proposals=options['max_proposal_num'],
                              max_proposals=options['max_proposal_num'],
                              verbose=False)
     evaluator.evaluate()

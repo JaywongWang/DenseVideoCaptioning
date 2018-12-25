@@ -218,6 +218,8 @@ class CaptionModel(object):
                 event_hidden_feats_reshape = tf.reshape(event_hidden_feats_tile, [-1, 2*self.options['rnn_size']])
 
                 feat_state_concat = tf.concat([proposal_feats_reshape, h_state_reshape, event_hidden_feats_reshape], axis=-1, name='feat_state_concat')
+                #feat_state_concat = tf.concat([tf.reshape(tf.tile(word_embed, [1, self.options['max_proposal_len']]), [-1, self.options['word_embed_size']]), proposal_feats_reshape, h_state_reshape, event_hidden_feats_reshape], axis=-1, name='feat_state_concat')
+
 
 
                 # use a two-layer network to model temporal soft attention over proposal feature sequence when predicting next word (dynamic)
@@ -253,23 +255,33 @@ class CaptionModel(object):
                         # model a gate to weight each element of context and feature
                         attended_proposal_feat_reshape = tf.nn.tanh(attended_proposal_feat_reshape)
                         with tf.variable_scope('context_gating', reuse=reuse):
+                            '''
                             context_feats_transform = tf.contrib.layers.fully_connected(
                                 inputs=event_hidden_feats,
                                 num_outputs=self.options['video_feat_dim'],
-                                activation_fn=tf.nn.tanh,
+                                activation_fn=None,
                                 weights_initializer=tf.contrib.layers.xavier_initializer()
+                            )
+                            '''
+                            context_feats_transform = event_hidden_feats
+
+                            proposal_feats_transform = tf.contrib.layers.fully_connected(
+                                inputs = attended_proposal_feat_reshape,
+                                num_outputs = 2*self.options['rnn_size'],
+                                activation_fn = tf.nn.tanh,
+                                weights_initializer = tf.contrib.layers.xavier_initializer()
                             )
                             
                             
                             gate = tf.contrib.layers.fully_connected(
-                                inputs=tf.concat([word_embed, h_state, context_feats_transform, attended_proposal_feat_reshape], axis=-1),
-                                num_outputs=self.options['video_feat_dim'],
+                                inputs=tf.concat([word_embed, h_state, context_feats_transform, proposal_feats_transform], axis=-1),
+                                num_outputs=2*self.options['rnn_size'],
                                 activation_fn=tf.nn.sigmoid,
                                 weights_initializer=tf.contrib.layers.xavier_initializer()
                             )
 
                             gated_context_feats = tf.multiply(context_feats_transform, gate)
-                            gated_proposal_feats = tf.multiply(attended_proposal_feat_reshape, 1.-gate)
+                            gated_proposal_feats = tf.multiply(proposal_feats_transform, 1.-gate)
                             proposal_feats_full = tf.concat([gated_context_feats, gated_proposal_feats], axis=-1)
                             
                     else:
@@ -295,10 +307,11 @@ class CaptionModel(object):
                 word_ids = tf.concat([word_ids, tf.expand_dims(word_id, axis=-1)], axis=-1)
                 word_confidences = tf.concat([word_confidences, tf.expand_dims(word_confidence, axis=-1)], axis=-1)
 
-        sentence_confidences = tf.reduce_sum(tf.log(tf.clip_by_value(word_confidences, 1e-20, 1.)), axis=-1)
+        #sentence_confidences = tf.reduce_sum(tf.log(tf.clip_by_value(word_confidences, 1e-20, 1.)), axis=-1)
+        word_confidences = tf.log(tf.clip_by_value(word_confidences, 1e-20, 1.))
 
         outputs['word_ids'] = word_ids
-        outputs['sentence_confidences'] = sentence_confidences
+        outputs['word_confidences'] = word_confidences
 
         return inputs, outputs
 
@@ -562,6 +575,8 @@ class CaptionModel(object):
                 h_state_reshape = tf.reshape(h_state_tile, [-1, self.options['num_rnn_layers']*self.options['rnn_size']])
                 
                 feat_state_concat = tf.concat([proposal_feats_reshape, h_state_reshape, event_hidden_feats_reshape], axis=-1, name='feat_state_concat')
+                #feat_state_concat = tf.concat([tf.reshape(tf.tile(word_embed, [1, self.options['max_proposal_len']]), [-1, self.options['word_embed_size']]), proposal_feats_reshape, h_state_reshape, event_hidden_feats_reshape], axis=-1, name='feat_state_concat')
+
 
                 # use a two-layer network to model attention over video feature sequence when predicting next word (dynamic)
                 with tf.variable_scope('attention') as attention_scope:
@@ -595,22 +610,33 @@ class CaptionModel(object):
                         # model a gate to weight each element of context and feature
                         attended_proposal_feat_reshape = tf.nn.tanh(attended_proposal_feat_reshape)
                         with tf.variable_scope('context_gating'):
+                            '''
                             context_feats_transform = tf.contrib.layers.fully_connected(
                                 inputs=event_hidden_feats,
                                 num_outputs=self.options['video_feat_dim'],
-                                activation_fn=tf.nn.tanh,
+                                activation_fn=None,
                                 weights_initializer=tf.contrib.layers.xavier_initializer()
+                            )
+                            '''
+
+                            context_feats_transform = event_hidden_feats
+
+                            proposal_feats_transform = tf.contrib.layers.fully_connected(
+                                inputs = attended_proposal_feat_reshape,
+                                num_outputs = 2*self.options['rnn_size'],
+                                activation_fn = tf.nn.tanh,
+                                weights_initializer = tf.contrib.layers.xavier_initializer()
                             )
                             
                             # context gating
                             gate = tf.contrib.layers.fully_connected(
-                                inputs=tf.concat([word_embed, h_state, context_feats_transform, attended_proposal_feat_reshape], axis=-1),
-                                num_outputs=self.options['video_feat_dim'],
+                                inputs=tf.concat([word_embed, h_state, context_feats_transform, proposal_feats_transform], axis=-1),
+                                num_outputs=2*self.options['rnn_size'],
                                 activation_fn=tf.nn.sigmoid,
                                 weights_initializer=tf.contrib.layers.xavier_initializer()
                             )
                             gated_context_feats = tf.multiply(context_feats_transform, gate)
-                            gated_proposal_feats = tf.multiply(attended_proposal_feat_reshape, 1.-gate)
+                            gated_proposal_feats = tf.multiply(proposal_feats_transform, 1.-gate)
                             proposal_feats_full = tf.concat([gated_context_feats, gated_proposal_feats], axis=-1)
                             
                     else:

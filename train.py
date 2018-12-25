@@ -174,9 +174,14 @@ def evaluation_metric_greedy(options, data_provision, sess, proposal_inputs, cap
         # remove <END> word
         out_sentences = []
         for sentence in sentences:
+            end_id = options['caption_seq_len']
             if '<END>' in sentence:
-                sentence = sentence[:sentence.index('<END>')]
-            out_sentences.append(' '.join(sentence))
+                end_id = sentence.index('<END>')
+                sentence = sentence[:end_id]
+            
+            sentence = ' '.join(sentence)
+            sentence = sentence.replace('<UNK>', '')
+            out_sentences.append(sentence)
 
         
         print('Output sentences: ')
@@ -208,7 +213,7 @@ def evaluation_metric_greedy(options, data_provision, sess, proposal_inputs, cap
     evaluator = ANETcaptions(ground_truth_filenames=['densevid_eval-master/data/val_1.json', 'densevid_eval-master/data/val_2.json'],
                              prediction_filename=resFile,
                              tious=options['tiou_measure'],
-                             max_proposals=1000,
+                             max_proposals=options['max_proposal_num'],
                              verbose=False)
     evaluator.evaluate()
 
@@ -248,7 +253,8 @@ def evaluation_metric_greedy(options, data_provision, sess, proposal_inputs, cap
 def train(options):
     
     sess_config = tf.ConfigProto()
-    sess_config.gpu_options.allow_growth=True
+    #sess_config.gpu_options.allow_growth=True
+    sess_config.gpu_options.allow_growth=False
     os.environ['CUDA_VISIBLE_DEVICES'] = str(options['gpu_id'])[1:-1]
     sess = tf.InteractiveSession(config=sess_config)
 
