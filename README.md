@@ -39,7 +39,7 @@ Follow the script test.py to make proposal predictions and to evaluate the predi
 
 Please note that the official evaluation metric has been [updated](https://github.com/ranjaykrishna/densevid_eval/commit/bbbd49d31a038acf2642f7ae158bb6b9da6937fc) (Line 194). In the paper, old metric is reported (but still, you can compare results from different methods, all CVPR-2018 papers report old metric).
 
-### Results
+### Pre-trained Model & Results
 
 [Deprecated] The predicted results for val/test set can be found [here](https://drive.google.com/drive/folders/1KZfzoTV3qqtnzALwZgd5IU5BRkj69SZ8?usp=sharing). 
 
