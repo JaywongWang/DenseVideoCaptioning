@@ -29,7 +29,7 @@ The configuration (from my experiments) is given in opt.py, including model setu
 
 Train dense-captioning model using the script train.py.
 
-First pre-train the proposal module. Set train_proposal=True and train_caption=False. Then train the whole dense-captioning model by setting train_proposal=True and train_caption=True. To understand the proposal module, I refer you to the original [SST](http://openaccess.thecvf.com/content_cvpr_2017/papers/Buch_SST_Single-Stream_Temporal_CVPR_2017_paper.pdf) paper and also my tensorflow [implementation](https://github.com/JaywongWang/SST-Tensorflow) of SST.
+First pre-train the proposal module (you may need to slightly modify the code to support batch size of 32, using batch size of 1 could lead to unsatisfactory performance). The pretrained proposal model can be found in https://drive.google.com/drive/folders/1IeKkuY3ApYe_QpFjarweRb2MTJKTCOLa. Then train the whole dense-captioning model by setting train_proposal=True and train_caption=True. To understand the proposal module, I refer you to the original [SST](http://openaccess.thecvf.com/content_cvpr_2017/papers/Buch_SST_Single-Stream_Temporal_CVPR_2017_paper.pdf) paper and also my tensorflow [implementation](https://github.com/JaywongWang/SST-Tensorflow) of SST.
 
 ### Prediction
 
