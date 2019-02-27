@@ -53,15 +53,5 @@ python==2.7.5
 
 Other versions may also work.
 
-**Update:** 
-1. I corrected some naming errors and simplified the proposal loss using tensorflow built-in function.
-2. I uploaded C3D features with stride of 64 frames (used in my paper). You can find it [here](https://drive.google.com/file/d/1D6-sDPEkOJX32h0-EclxpiEmiMkNGybo/view?usp=sharing).
-3. I uploaded val/test results of both without joint ranking and with joint ranking.
-4. I uploaded video_fps.json and updated test.py.
-5. Due to large file constraint, you may need to download data/paraphrase-en.gz [here](https://github.com/tylin/coco-caption/tree/3f0fe9b819c0ea881a56441e4de1146924a394eb/pycocoevalcap/meteor/data) and put it in densevid_eval-master/coco-caption/pycocoevalcap/meteor/data/.
-6. I corrected multi-rnn mistake casused by get_rnn_cell() function (see model.py).
-7. I updated evaluation code. "evaluator_old.py" is used in my paper, "evaluator.py" is used since ActivityNet Captions 2018 Challenge. 
-8. I removed too small anchors and too large anchors, resulting into 120 anchors.
-9. I modified data_provider.py and model.py to correct the loss weighting.
-10. I corrected the mistake from the evaluator (evaluator_old.py & evaluate_old.py). You can match the code with https://github.com/ranjaykrishna/densevid_eval/blob/b8d90707984bf9c99454ba82b089006f14fb62b3/evaluate.py
-11. I uploaded the pretrained [model](https://drive.google.com/drive/folders/1qeH5r5XEabkcQDJ25unSCvEUziRleN80?usp=sharing). Please also download the updated code.
+**NOTE:** 
+1. Due to large file constraint, you may need to download data/paraphrase-en.gz [here](https://github.com/tylin/coco-caption/tree/3f0fe9b819c0ea881a56441e4de1146924a394eb/pycocoevalcap/meteor/data) and put it in densevid_eval-master/coco-caption/pycocoevalcap/meteor/data/.
