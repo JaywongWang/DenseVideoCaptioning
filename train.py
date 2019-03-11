@@ -361,8 +361,6 @@ def train(options):
     # initialize model from a given checkpoint path
     if options['init_from']:
         print('Init model from %s'%options['init_from'])
-        pre_status = json.load(open(os.path.join(os.path.dirname(options['init_from']), 'status.json')))
-        pre_options = pre_status['options']
         restore_vars = tf.get_collection(tf.GraphKeys.GLOBAL_VARIABLES)
 
         if options['init_module'] == 'proposal':
