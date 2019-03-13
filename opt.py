@@ -25,6 +25,8 @@ def default_options():
 
     options['init_from'] = ''       # checkpoint to initialize with
     options['init_module'] = 'all'  # all/proposal/caption, which module to initialize
+    
+    options['random_seed'] = 101     # random seed
 
 
     ### MODEL CONFIG
